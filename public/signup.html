@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign Up</title>
+    <style>
+      @keyframes fadeIn {
+        0% {
+          opacity: 0;
+          transform: translateY(-20px);
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes float {
+        0% {
+          box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+          transform: translateY(0);
+        }
+        50% {
+          box-shadow: 0 20px 25px rgba(0, 0, 0, 0.3);
+          transform: translateY(-10px);
+        }
+        100% {
+          box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+          transform: translateY(0);
+        }
+      }
+
+      body {
+        background: linear-gradient(to right, #141e30, #243b55);
+        font-family: "Roboto", sans-serif;
+        animation: fadeIn 1s ease-in-out;
+      }
+
+      .signup-box {
+        width: 400px;
+        height: 640px;
+        margin: auto;
+        background: linear-gradient(145deg, #2a2a72, #009ffd);
+        border-radius: 15px;
+        padding: 30px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+        transform-style: preserve-3d;
+        animation: float 5s ease-in-out infinite;
+      }
+
+      h1 {
+        text-align: center;
+        padding-top: 10px;
+        color: white;
+        font-size: 28px;
+        text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+        animation: fadeIn 1s ease-in-out;
+      }
+
+      form {
+        width: 340px;
+        margin-left: 10px;
+        animation: fadeIn 1.5s ease-in-out;
+      }
+
+      form label {
+        display: block;
+        margin-top: 15px;
+        font-size: 16px;
+        color: #f0f0f0;
+        text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.4);
+      }
+
+      form input {
+        width: 100%;
+        padding: 12px;
+        border: none;
+        border-radius: 8px;
+        margin-top: 5px;
+        outline: none;
+        background: #fff;
+        box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.2);
+        color: #333;
+        font-size: 16px;
+        transition: transform 0.2s ease, box-shadow 0.3s ease;
+      }
+
+      form input:focus {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      }
+
+      input[type="submit"] {
+        width: 100%;
+        padding: 12px;
+        margin-top: 25px;
+        border: none;
+        border-radius: 8px;
+        background: linear-gradient(45deg, #ff6a00, #ee0979);
+        color: white;
+        font-size: 18px;
+        cursor: pointer;
+        transition: transform 0.3s ease, background-color 0.4s ease;
+        box-shadow: 0 5px 15px rgba(255, 105, 180, 0.4);
+      }
+
+      input[type="submit"]:hover {
+        background: linear-gradient(45deg, #ee0979, #ff6a00);
+        transform: translateY(-4px);
+      }
+
+      p {
+        text-align: center;
+        padding-top: 15px;
+        color: #fff;
+        font-size: 14px;
+        animation: fadeIn 1.6s ease-in-out;
+      }
+
+      .para-2 {
+        text-align: center;
+        color: #fff;
+        font-size: 15px;
+        margin-top: -5px;
+        animation: fadeIn 1.7s ease-in-out;
+      }
+
+      .para-2 a {
+        color: #49c1a2;
+        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+        transition: color 0.3s ease;
+      }
+
+      .para-2 a:hover {
+        color: #66e0c0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="signup-box">
+      <h1>Sign Up</h1>
+      <form id="signupForm">
+        <label>First Name</label>
+        <input type="text" id="firstName" placeholder="Enter First Name" required />
+        <label>Last Name</label>
+        <input type="text" id="lastName" placeholder="Enter Last Name" required />
+        <label>Email</label>
+        <input type="email" id="email" placeholder="Enter Email" required />
+        <label>Password</label>
+        <input type="password" id="password" placeholder="Enter Password" required />
+        <label>Confirm Password</label>
+        <input type="password" id="confirmPassword" placeholder="Confirm Password" required />
+        <input type="submit" value="Submit" />
+      </form>
+      <p>
+        By clicking the Sign Up button, you agree to our <br />
+        <a href="#">Terms and Conditions</a> and <a href="#">Privacy Policy</a>
+      </p>
+    </div>
+    <p class="para-2">
+      Already have an account? <a href="login.html">Login here</a>
+    </p>
+
+    <script>
+      document.getElementById('signupForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const firstName = document.getElementById('firstName').value;
+        const lastName = document.getElementById('lastName').value;
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+        
+        if (password !== confirmPassword) {
+          alert('Passwords do not match');
+          return;
+        }
+        
+        fetch('http://localhost:3000/signup', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ firstName, lastName, email, password }),
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.message) {
+            alert('Signup successful');
+            window.location.href = 'login.html';
+          } else {
+            alert(data.error || 'Signup failed');
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          alert('An error occurred during signup');
+        });
+      });
+    </script>
+  </body>
+</html>

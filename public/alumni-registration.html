@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alumni Registration</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            background-color: #1a237e;
+            color: white;
+            padding: 15px;
+            margin: -20px -20px 20px -20px;
+            border-radius: 8px 8px 0 0;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="text"], input[type="email"], input[type="date"], select, textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        select {
+            appearance: none;
+            background-image: url('data:image/svg+xml;utf8,<svg fill="black" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+            background-repeat: no-repeat;
+            background-position-x: 98%;
+            background-position-y: 50%;
+        }
+        .row {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 15px;
+        }
+        .col {
+            flex: 1;
+        }
+        .file-input {
+            display: flex;
+            align-items: center;
+        }
+        .file-input input[type="file"] {
+            display: none;
+        }
+        .file-input label {
+            background-color: #f0f0f0;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button {
+            background-color: #1a237e;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        button:hover {
+            background-color: #3949ab;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Alumni Registration</h1>
+        <form id="alumniForm" action="/alumni-registration" method="post" enctype="multipart/form-data">
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <label for="name">Name*</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label for="permanent-address">Permanent Address*</label>
+                        <textarea id="permanent-address" name="permanent_address" required></textarea>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label for="present-address">Present Address*</label>
+                        <textarea id="present-address" name="present_address" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <input type="checkbox" id="same-address">
+                        <label for="same-address">Same as Permanent Address?</label>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <label for="gender">Gender*</label>
+                        <select id="gender" name="gender" required>
+                            <option value="">Select Gender</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label for="country-permanent">Country (Permanent)*</label>
+                        <input type="text" id="country-permanent" name="country_permanent" required>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label for="country-present">Country (Present)*</label>
+                        <input type="text" id="country-present" name="country_present" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <label for="standard">Standard*</label>
+                        <input type="text" id="standard" name="standard" required>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label for="state-permanent">State (Permanent)*</label>
+                        <input type="text" id="state-permanent" name="state_permanent" required>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label for="state-present">State (Present)*</label>
+                        <input type="text" id="state-present" name="state_present" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <label for="passout-year">Passout Year*</label>
+                        <input type="number" id="passout-year" name="passout_year" required>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label for="district-permanent">District (Permanent)*</label>
+                        <input type="text" id="district-permanent" name="district_permanent" required>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label for="district-present">District (Present)*</label>
+                        <input type="text" id="district-present" name="district_present" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <label for="date-of-birth">Date of Birth*</label>
+                        <input type="date" id="date-of-birth" name="date_of_birth" required>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label for="city-permanent">City (Permanent)*</label>
+                        <input type="text" id="city-permanent" name="city_permanent" required>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label for="city-present">City (Present)*</label>
+                        <input type="text" id="city-present" name="city_present" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <label for="current-designation">Current Designation</label>
+                        <input type="text" id="current-designation" name="current_designation">
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label for="photo">Please upload your photo*</label>
+                        <div class="file-input">
+                            <input type="file" id="photo" name="photo" required accept="image/*">
+                            <label for="photo">Choose File</label>
+                            <span id="file-chosen">No file chosen</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <label for="mobile-number">Mobile Number*</label>
+                        <input type="text" id="mobile-number" name="mobile_number" required>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label for="email">Email*</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('same-address').addEventListener('change', function() {
+            if(this.checked) {
+                document.getElementById('present-address').value = document.getElementById('permanent-address').value;
+            } else {
+                document.getElementById('present-address').value = '';
+            }
+        });
+
+        document.getElementById('photo').addEventListener('change', function() {
+            document.getElementById('file-chosen').textContent = this.files[0].name;
+        });
+
+        document.getElementById('alumniForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            
+            fetch('/alumni-registration', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message) {
+                    alert(data.message);
+                    // Optionally redirect or clear the form here
+                } else {
+                    alert('Error: ' + data.error);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again.');
+            });
+        });
+    </script>
+</body>
+</html>

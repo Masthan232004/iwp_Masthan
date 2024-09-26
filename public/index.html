@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Poppins", sans-serif;
+        }
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: #25252b;
+        }
+        .container {
+            position: relative;
+            width: 750px;
+            height: 450px;
+            border: 2px solid #ff2770;
+            box-shadow: 0 0 25px #ff2770;
+            overflow: hidden;
+        }
+        .container .form-box {
+            position: absolute;
+            top: 0;
+            width: 50%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            background-color: rgba(8, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 0 40px;
+        }
+        .form-box h1 {
+            font-size: 32px;
+            text-align: center;
+            color: #fff;
+        }
+        .form-box .input-box {
+            position: relative;
+            width: 100%;
+            height: 50px;
+            margin-top: 25px;
+        }
+        .input-box input {
+            width: 100%;
+            height: 100%;
+            background: transparent;
+            border: none;
+            outline: none;
+            font-size: 16px;
+            color: #fff;
+            font-weight: 600;
+            border-bottom: 2px solid #fff;
+            padding: 0 35px 0 5px;
+            transition: .5s;
+        }
+        .input-box input:focus,
+        .input-box input:valid {
+            border-bottom: 2px solid #ff2770;
+        }
+        .input-box label {
+            position: absolute;
+            top: 50%;
+            left: 5px;
+            transform: translateY(-50%);
+            font-size: 16px;
+            color: #fff;
+            pointer-events: none;
+            transition: .5s;
+        }
+        .input-box input:focus ~ label,
+        .input-box input:valid ~ label {
+            top: -5px;
+            color: #ff2770;
+        }
+        .input-box i {
+            position: absolute;
+            top: 50%;
+            right: 0;
+            font-size: 20px;
+            transform: translateY(-50%);
+            color: #fff;
+            transition: .5s;
+        }
+        .input-box input:focus ~ i,
+        .input-box input:valid ~ i {
+            color: #ff2770;
+        }
+        input[type="submit"] {
+            width: 100%;
+            height: 45px;
+            background: transparent;
+            border: 2px solid #ff2770;
+            outline: none;
+            border-radius: 40px;
+            cursor: pointer;
+            font-size: 16px;
+            color: #fff;
+            font-weight: 600;
+            transition: .5s;
+            margin-top: 20px;
+        }
+        input[type="submit"]:hover {
+            background-color: #ff2770;
+        }
+        .para-2 {
+            font-size: 14px;
+            text-align: center;
+            margin-top: 20px;
+            color: #fff;
+        }
+        .para-2 a {
+            color: #ff2770;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .para-2 a:hover {
+            text-decoration: underline;
+        }
+        .info-content {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 50%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            text-align: right;
+            padding: 0 40px 60px 150px;
+        }
+        .info-content h2 {
+            color: #fff;
+            text-transform: uppercase;
+            font-size: 36px;
+            line-height: 1.3;
+        }
+        .info-content p {
+            color: #fff;
+            font-size: 16px;
+        }
+        .container .curved-shape {
+            position: absolute;
+            right: 0;
+            top: -5px;
+            height: 600px;
+            width: 850px;
+            background: linear-gradient(45deg,#25252b,#ff2770);
+            transform: rotate(10deg) skewY(40deg);
+            transform-origin: bottom right;
+            z-index: -1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="curved-shape"></div>
+        <div class="form-box">
+            <h1>Login</h1>
+            <form id="loginForm">
+                <div class="input-box">
+                    <input type="email" id="email" required>
+                    <label for="email">Email</label>
+                    <i class='bx bxs-envelope'></i>
+                </div>
+                <div class="input-box">
+                    <input type="password" id="password" required>
+                    <label for="password">Password</label>
+                    <i class='bx bxs-lock-alt'></i>
+                </div>
+                <input type="submit" value="Submit">
+            </form>
+            <p class="para-2">
+                Don't have an account? <a href="signup.html">Sign Up Here</a>
+            </p>
+        </div>
+        <div class="info-content">
+            <h2>WELCOME CHRISTITE!</h2>
+            
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            fetch('/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email, password }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message) {
+                    alert('Login successful');
+                    localStorage.setItem('userName', data.userName);
+                    window.location.href = data.redirectUrl;
+                } else {
+                    alert(data.error || 'Login failed');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred during login');
+            });
+        });
+    </script>
+</body>
+</html>

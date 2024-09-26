@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Portal</title>
+    
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;300;400;500;600&display=swap" rel="stylesheet">
+    <!-- QR Code library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <!-- jQuery for AJAX -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    <style>
+        *{
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            outline: none;
+            border: none;
+            text-transform: capitalize;
+            transition: all .2s linear;
+        }
+
+        .container{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 25px;
+            min-height: 100vh;
+            background: linear-gradient(90deg, #2ecc71 60%, #27ae60 40.1%);
+        }
+
+        .container form{
+            padding: 20px;
+            width: 700px;
+            background: #fff;
+            box-shadow: 0 5px 10px rgba(0,0,0,.1);
+        }
+
+        .container form .row{
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .container form .row .col{
+            flex: 1 1 250px;
+        }
+
+        .container form .row .col .title{
+            font-size: 20px;
+            color: #333;
+            padding-bottom: 5px;
+            text-transform: uppercase;
+        }
+
+        .container form .row .col .inputBox{
+            margin: 15px 0;
+        }
+
+        .container form .row .col .inputBox span{
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .container form .row .col .inputBox input, .container form .row .col .inputBox select{
+            width: 100%;
+            border: 1px solid #ccc;
+            padding: 10px 15px;
+            font-size: 15px;
+            text-transform: none;
+        }
+
+        .container form .row .col .inputBox input:focus, .container form .row .col .inputBox select:focus{
+            border: 1px solid #000;
+        }
+
+        .container form .row .col .flex{
+            display: flex;
+            gap: 15px;
+        }
+
+        .container form .row .col .inputBox img{
+            height: 34px;
+            margin-top: 5px;
+            filter: drop-shadow(0 0 1px #000);
+        }
+
+        .container form .submit-btn{
+            width: 100%;
+            padding: 12px;
+            font-size: 17px;
+            background: #27ae60;
+            color: #fff;
+            margin-top: 5px;
+            cursor: pointer;
+        }
+
+        .container form .submit-btn:hover{
+            background: #2ecc71;
+        }
+
+        #timer {
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+
+    <script>
+        let qrWindow = null;
+        let timerInterval = null;
+
+        function updateFees() {
+            var standard = document.getElementById('standard').value;
+            var fees = 0;
+            if (standard !== "") {
+                fees = parseInt(standard) * 10659;
+            }
+            document.getElementById('fees').value = fees;
+        }
+
+        function generateQRCode(event) {
+            event.preventDefault();
+
+            const fullName = document.getElementById('fullName').value;
+            const email = document.getElementById('email').value;
+            const standard = document.getElementById('standard').value;
+            const fees = document.getElementById('fees').value;
+            const cardName = document.getElementById('cardName').value;
+            const cardNumber = document.getElementById('cardNumber').value;
+            const expMonth = document.getElementById('expMonth').value;
+            const expYear = document.getElementById('expYear').value;
+            const cvv = document.getElementById('cvv').value;
+
+            // Send data to server
+            $.ajax({
+                url: '/save-payment',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    fullName,
+                    email,
+                    standard,
+                    fees,
+                    cardName,
+                    cardNumber,
+                    expMonth,
+                    expYear,
+                    cvv
+                }),
+                success: function(response) {
+                    console.log('Payment data saved:', response);
+                    // Continue with QR code generation
+                    showQRCode(fees);
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error saving payment data:', error);
+                    alert('Error saving payment data. Please try again.');
+                }
+            });
+        }
+
+        function showQRCode(fees) {
+            // Close previous QR window if it exists
+            if (qrWindow && !qrWindow.closed) {
+                qrWindow.close();
+            }
+
+            // Create a new window
+            qrWindow = window.open('', 'QR Code', 'width=400,height=450');
+            qrWindow.document.write(`
+                <html>
+                <head>
+                    <title>QR Code</title>
+                    <style>
+                        body {
+                            font-family: 'Poppins', sans-serif;
+                            background: linear-gradient(90deg, #2ecc71 60%, #27ae60 40.1%);
+                            display: flex;
+                            flex-direction: column;
+                            justify-content: center;
+                            align-items: center;
+                            height: 100vh;
+                            margin: 0;
+                        }
+                        #qrcode {
+                            background: white;
+                            padding: 20px;
+                            border-radius: 10px;
+                        }
+                        #timer {
+                            font-size: 24px;
+                            font-weight: bold;
+                            color: white;
+                            margin-top: 20px;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div id="qrcode"></div>
+                    <div id="timer">Time remaining: 60 seconds</div>
+                </body>
+                </html>
+            `);
+
+            // Generate QR code in the new window
+            new QRCode(qrWindow.document.getElementById('qrcode'), {
+                text: `Payment Amount: ${fees}`,
+                width: 256,
+                height: 256
+            });
+
+            // Start the timer
+            let timeLeft = 60;
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                qrWindow.document.getElementById('timer').textContent = `Time remaining: ${timeLeft} seconds`;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    qrWindow.document.getElementById('qrcode').innerHTML = '<div style="font-size: 24px; color: red;">QR Code Expired</div>';
+                    qrWindow.document.getElementById('timer').textContent = 'QR Code is no longer valid';
+                }
+            }, 1000);
+
+            // Clear the interval when the window is closed
+            qrWindow.onbeforeunload = () => {
+                clearInterval(timerInterval);
+            };
+        }
+    </script>
+</head>
+<body>
+
+<div class="container">
+    <form onsubmit="generateQRCode(event)">
+        <div class="row">
+            <div class="col">
+                <h3 class="title">billing details</h3>
+
+                <div class="inputBox">
+                    <span>full name :</span>
+                    <input type="text" id="fullName" placeholder="NAME" required>
+                </div>
+                <div class="inputBox">
+                    <span>email :</span>
+                    <input type="email" id="email" placeholder="example@gmail.com" required>
+                </div>
+
+                <div class="inputBox">
+                    <span>standard :</span>
+                    <select id="standard" onchange="updateFees()" required>
+                        <option value="">Select Standard</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                    </select>
+                </div>
+
+                <div class="inputBox">
+                    <span>FEES :</span>
+                    <input type="text" id="fees" placeholder="Automatically calculated" readonly>
+                </div>
+            </div>
+
+            <div class="col">
+                <h3 class="title">payment</h3>
+
+                <div class="inputBox">
+                    <span>cards accepted :</span>
+                    <img src="images/card.png" alt="Accepted cards">
+                </div>
+                <div class="inputBox">
+                    <span>name on card :</span>
+                    <input type="text" id="cardName" placeholder="NAME" required>
+                </div>
+                <div class="inputBox">
+                    <span>credit card number :</span>
+                    <input type="text" id="cardNumber" placeholder="1111-2222-3333-4444" required>
+                </div>
+                <div class="inputBox">
+                    <span>exp month :</span>
+                    <input type="text" id="expMonth" placeholder="January" required>
+                </div>
+
+                <div class="flex">
+                    <div class="inputBox">
+                        <span>exp year :</span>
+                        <input type="number" id="expYear" placeholder="2024" required>
+                    </div>
+                    <div class="inputBox">
+                        <span>CVV :</span>
+                        <input type="text" id="cvv" placeholder="123" required>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <input type="submit" value="Generate QR Code" class="submit-btn">
+    </form>
+</div>
+
+</body>
+</html>

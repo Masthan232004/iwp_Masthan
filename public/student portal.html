@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edisapp Landing Page</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            height: 100%;
+        }
+        .container {
+            display: flex;
+            height: 100%;
+            background-color: #1a237e;
+        }
+        .left-panel {
+            flex: 2;
+            padding: 20px;
+            color: white;
+            display: flex;
+            flex-direction: column;
+        }
+        .right-panel {
+            flex: 1;
+            background-color: white;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .main-image {
+            width: 100%;
+            max-width: 900px;
+            margin: 30px 0;
+        }
+        .footer {
+            margin-top: auto;
+            font-size: 0.8em;
+        }
+        .school-logo {
+            width: 150px;
+            margin-bottom: 10px;
+        }
+        .school-name {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            max-width: 300px;
+        }
+        input {
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #1a237e;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .app-links {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+            width: 100%;
+        }
+        .app-links img {
+            height: 20px;
+        }
+        .social-links {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+        }
+        .social-links img {
+            width: 30px;
+            height: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="left-panel">
+            <img src="images/eloit.png"  alt="Edisapp Dashboard" class="main-image">
+            <div class="footer">
+                <p>Powered by Eloit | Terms of Use | Refund Policy | Privacy Policy</p>
+                <p>www.eloit.com</p>
+            </div>
+        </div>
+        <div class="right-panel">
+            <img src="images/christ logo.png" alt="Christ School State Logo" class="school-logo">
+            <div class="school-name">
+                <h2>CHRIST SCHOOL STATE</h2>
+                <p>Dharmaram College Post, Bangalore</p>
+            </div>
+            <form class="login-form">
+                <input type="text" placeholder="Admission Number">
+                <input type="password" placeholder="Password">
+                <button type="submit">→</button>
+            </form>
+            <div class="app-links">
+                <img src="images/google play.png" alt="Google Play">
+                <img src="images/appstoreicon.png" alt="App Store">
+                <img src="images/parentportalicon.png" alt="Parent Portal">
+            </div>
+            <div>
+                <p>School Code: CHRIST</p>
+            </div>
+            <div class="social-links">
+                <img src="images/world-wide-web.png" alt="Website">
+                <img src="images/youtube.png" alt="YouTube">
+                <img src="images/twitter.png" alt="Twitter">
+                <img src="images/facebook-app-symbol.png" alt="Facebook">
+                <img src="images/instagram.png" alt="Instagram">
+            </div>
+        </div>
+    </div>
+</body>
+</html>
